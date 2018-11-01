@@ -1,0 +1,9 @@
+/home/krzysztof/Projects/CalorieCounter/CalorieCounter.Core/bin/Debug/netcoreapp2.1/CalorieCounter.Core.deps.json
+/home/krzysztof/Projects/CalorieCounter/CalorieCounter.Core/bin/Debug/netcoreapp2.1/CalorieCounter.Core.dll
+/home/krzysztof/Projects/CalorieCounter/CalorieCounter.Core/bin/Debug/netcoreapp2.1/CalorieCounter.Core.pdb
+/home/krzysztof/Projects/CalorieCounter/CalorieCounter.Core/obj/Debug/netcoreapp2.1/CalorieCounter.Core.csprojAssemblyReference.cache
+/home/krzysztof/Projects/CalorieCounter/CalorieCounter.Core/obj/Debug/netcoreapp2.1/CalorieCounter.Core.csproj.CoreCompileInputs.cache
+/home/krzysztof/Projects/CalorieCounter/CalorieCounter.Core/obj/Debug/netcoreapp2.1/CalorieCounter.Core.AssemblyInfoInputs.cache
+/home/krzysztof/Projects/CalorieCounter/CalorieCounter.Core/obj/Debug/netcoreapp2.1/CalorieCounter.Core.AssemblyInfo.cs
+/home/krzysztof/Projects/CalorieCounter/CalorieCounter.Core/obj/Debug/netcoreapp2.1/CalorieCounter.Core.dll
+/home/krzysztof/Projects/CalorieCounter/CalorieCounter.Core/obj/Debug/netcoreapp2.1/CalorieCounter.Core.pdb

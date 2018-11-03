@@ -5,7 +5,7 @@
     "tasks": [
         {
             "label": "build",
-            "command": "cd ${workspaceFolder}/CalorieCounter.Api; sudo dotnet build",
+            "command": "cd ${workspaceFolder}/CalorieCounter.Api; dotnet build",
             "type": "shell",
             "group": "build",
             "presentation": {

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using CalorieCounter.Infrastructure.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using CalorieCounter.Infrastructure.IoC;
+using CalorieCounter.Infrastructure.EF;
 
 namespace CalorieCounter.Api
 {
@@ -34,8 +35,13 @@ namespace CalorieCounter.Api
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            
+            services.AddOptions();
             services.AddMvc();
-
+            
+            services.AddEntityFrameworkSqlServer()
+                    .AddDbContext<CalorieCounterContext>();
+                    
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(new ContainerModule(Configuration));
@@ -51,6 +57,7 @@ namespace CalorieCounter.Api
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            
             app.UseMvc();
         }
     }

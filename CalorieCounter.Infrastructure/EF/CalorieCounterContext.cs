@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using CalorieCounter.Infrastructure.Options;
+using CalorieCounter.Core.Domain;
 
 namespace CalorieCounter.Infrastructure.EF
 {
@@ -8,19 +9,18 @@ namespace CalorieCounter.Infrastructure.EF
     {
         private readonly IOptions<SqlOptions> _settings;
 
-        public CalorieCounterContext(DbContextOptions<CalorieCounterContext> options, IOptions<SqlOptions> settings):base(options)
-        {
-            _settings = settings;
-        }
+        public DbSet<User> Users { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public CalorieCounterContext(DbContextOptions<CalorieCounterContext> options):base(options)
         {
-            optionsBuilder.UseSqlServer(_settings.Value.ConnectionString);
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+                var userBuilder = modelBuilder.Entity<User>();
+                userBuilder.HasKey(x=>x.Id);
         }
 
     }

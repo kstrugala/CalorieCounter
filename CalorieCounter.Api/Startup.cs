@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CalorieCounter.Infrastructure.IoC;
 using CalorieCounter.Infrastructure.EF;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalorieCounter.Api
 {
@@ -39,8 +40,9 @@ namespace CalorieCounter.Api
             services.AddOptions();
             services.AddMvc();
             
-            services.AddEntityFrameworkSqlServer()
-                    .AddDbContext<CalorieCounterContext>();
+            services.AddDbContext<CalorieCounterContext>(options => 
+                        options.UseSqlServer(Configuration.GetConnectionString("CalorieCounterDb"), b => b.MigrationsAssembly("CalorieCounter.Api"))
+                    );
                     
             var builder = new ContainerBuilder();
             builder.Populate(services);

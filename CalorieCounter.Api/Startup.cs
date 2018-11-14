@@ -59,6 +59,10 @@ namespace CalorieCounter.Api
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
             
             app.UseMvc();
         }

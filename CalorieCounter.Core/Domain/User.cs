@@ -46,16 +46,16 @@ namespace CalorieCounter.Core.Domain
 
         public void SetFirstName(string firstName)
         {
-            if(!string.IsNullOrWhiteSpace(firstName))
+            if(string.IsNullOrWhiteSpace(firstName))
             {
-                throw new Exception("First name cannot be emnty.");
+                throw new Exception("First name cannot be empty.");
             }
             FirstName=firstName;
         }
 
         public void SetLastName(string lastName)
         {
-            if(!string.IsNullOrWhiteSpace(lastName))
+            if(string.IsNullOrWhiteSpace(lastName))
             {
                 throw new Exception("Last name cannot be emnty.");
             }

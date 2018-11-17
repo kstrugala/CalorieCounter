@@ -4,14 +4,16 @@ using CalorieCounter.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CalorieCounter.Api.Migrations
 {
     [DbContext(typeof(CalorieCounterContext))]
-    partial class CalorieCounterContextModelSnapshot : ModelSnapshot
+    [Migration("20181117174623_RefreshToken")]
+    partial class RefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

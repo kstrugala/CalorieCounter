@@ -12,6 +12,12 @@ using Microsoft.Extensions.Logging;
 using CalorieCounter.Infrastructure.IoC;
 using CalorieCounter.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
+using CalorieCounter.Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
+using CalorieCounter.Api.Middleware;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CalorieCounter.Api
 {
@@ -39,11 +45,40 @@ namespace CalorieCounter.Api
             
             services.AddOptions();
             services.AddMvc();
+
+            services.AddAuthorization(options => {
+                options.AddPolicy("Admin", p => p.RequireRole("admin"));
+                options.AddPolicy("User", p => p.RequireRole("user"));
+            });
+
+            services.AddAuthentication(o=>{
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(cfg=>{
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"])),
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidateAudience = false,
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });            
+
             
+
             services.AddDbContext<CalorieCounterContext>(options => 
                         options.UseSqlServer(Configuration.GetConnectionString("CalorieCounterDb"), b => b.MigrationsAssembly("CalorieCounter.Api"))
                     );
-                    
+
+            services.AddTransient<TokenManagerMiddleware>();
+            services.AddTransient<ITokenManager, TokenManager>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDistributedRedisCache(r => {
+                r.Configuration = Configuration["redis:ConnectionString"];
+            }); 
+
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(new ContainerModule(Configuration));
@@ -58,6 +93,12 @@ namespace CalorieCounter.Api
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+
+
+
+            app.UseAuthentication();
+            app.UseMiddleware<TokenManagerMiddleware>();
 
             if (env.IsDevelopment())
             {

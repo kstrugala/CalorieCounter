@@ -24,7 +24,13 @@ namespace CalorieCounter.Infrastructure.IoC.Modules
                 .InstancePerLifetimeScope();
 
 
-            builder.RegisterType<PasswordHasher<User>>().As<IPasswordHasher<User>>();
+            builder.RegisterType<PasswordHasher<User>>()
+                        .As<IPasswordHasher<User>>();
+
+            builder.RegisterType<JwtHandler>()
+                        .As<IJwtHandler>()
+                        .SingleInstance();
+
         }
     }
 }

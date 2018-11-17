@@ -20,6 +20,8 @@ namespace CalorieCounter.Infrastructure.IoC
         {
             builder.RegisterModule<CommandModule>();
             builder.RegisterModule<ServiceModule>();
+        
+            builder.RegisterModule(new SettingsModule(_configuration));
         }
     }
 }

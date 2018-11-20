@@ -31,7 +31,7 @@ namespace CalorieCounter.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("sign-in")]
-        public async Task<IActionResult> SignIn([FromBody] SignUpCommand command)
+        public async Task<IActionResult> SignIn([FromBody] SingInCommand command)
             => Ok(await _userService.SignIn(command.Email, command.Password));
 
 

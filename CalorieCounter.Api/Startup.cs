@@ -18,6 +18,7 @@ using CalorieCounter.Api.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace CalorieCounter.Api
 {
@@ -67,6 +68,12 @@ namespace CalorieCounter.Api
             });            
 
             
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Calorie Counter API", Version = "v1" });
+            });
+
 
             services.AddDbContext<CalorieCounterContext>(options => 
                         options.UseSqlServer(Configuration.GetConnectionString("CalorieCounterDb"), b => b.MigrationsAssembly("CalorieCounter.Api"))
@@ -105,6 +112,17 @@ namespace CalorieCounter.Api
                 app.UseDeveloperExceptionPage();
             }
             
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Calorie Counter API V1");
+            });
+
+
             app.UseMvc();
         }
     }

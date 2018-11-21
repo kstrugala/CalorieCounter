@@ -2,6 +2,7 @@ namespace CalorieCounter.Infrastructure.Services
 {
     public class ErrorCodes
     {
+        public static string InvalidId => "invalid_id";
         public static string InvalidCredentials => "invalid_credentials";
         public static string EmailInUse => "email_in_use";
         public static string InvalidEmail => "invalid_email";

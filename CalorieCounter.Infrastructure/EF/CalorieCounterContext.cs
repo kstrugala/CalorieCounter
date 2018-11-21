@@ -8,6 +8,7 @@ namespace CalorieCounter.Infrastructure.EF
     {
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         public CalorieCounterContext(DbContextOptions<CalorieCounterContext> options):base(options)
         {
@@ -21,6 +22,9 @@ namespace CalorieCounter.Infrastructure.EF
 
                 var refreshTokenBuilder = modelBuilder.Entity<RefreshToken>();
                 refreshTokenBuilder.HasKey(x=>x.Email);
+
+                var productsBuilder = modelBuilder.Entity<Product>();;
+                productsBuilder.HasKey(x=>x.Id);
 
         }
 

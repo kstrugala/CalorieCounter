@@ -1,5 +1,6 @@
 using Autofac;
 using CalorieCounter.Infrastructure.IoC.Modules;
+using CalorieCounter.Infrastructure.Mapper;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace CalorieCounter.Infrastructure.IoC
 
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterInstance(AutoMapperConfig.Initialize()).SingleInstance();
+
             builder.RegisterModule<CommandModule>();
             builder.RegisterModule<ServiceModule>();
         

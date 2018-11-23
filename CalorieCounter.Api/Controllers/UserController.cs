@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CalorieCounter.Infrastructure.Commands;
+using CalorieCounter.Infrastructure.Commands.FoodLog;
 using CalorieCounter.Infrastructure.Commands.Users;
 using CalorieCounter.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -13,11 +15,13 @@ namespace CalorieCounter.Api.Controllers
     public class UserController : ApiControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IFoodLogService _foodLogService;
         private readonly ITokenManager _tokenManager;
 
-        public UserController(ICommandDispatcher commandDispatcher, IUserService userService, ITokenManager tokenManager) : base(commandDispatcher)
+        public UserController(ICommandDispatcher commandDispatcher, IUserService userService, IFoodLogService foodLogService, ITokenManager tokenManager) : base(commandDispatcher)
         {
             _userService = userService;
+            _foodLogService = foodLogService;
             _tokenManager = tokenManager;
         }
 
@@ -53,5 +57,27 @@ namespace CalorieCounter.Api.Controllers
             await _tokenManager.DeactivateCurrentToken();
             return NoContent();
         }
+
+        [HttpGet("foodlog")]
+        public async Task<IActionResult> GetFoodLog()
+        {
+            var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = await _userService.GetUserIdAsync(email);
+            var foodLog = await _foodLogService.GetFoodLogAsync(userId);
+            return Json(foodLog);
+        }
+
+        [HttpPost("foodlog")]
+        public async Task<IActionResult> AddToFoodLog([FromBody] AddToFoodLogCommand command)
+        {
+            var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = await _userService.GetUserIdAsync(email);
+            command.UserId=userId;
+
+            await CommandDispatcher.DispatchAsync<AddToFoodLogCommand>(command);
+
+            return NoContent();
+        }
+
     }
 }

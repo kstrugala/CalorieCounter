@@ -70,6 +70,7 @@ namespace CalorieCounter.Infrastructure.Services
             user.SetLastName(lastName);
 
             await _context.Users.AddAsync(user);
+            await _context.FoodLogs.AddAsync(new FoodLog(user.Id));
             await _context.SaveChangesAsync();
 
         }
@@ -115,6 +116,17 @@ namespace CalorieCounter.Infrastructure.Services
         {
             await _context.RefreshTokens.AddAsync(refreshToken);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Guid> GetUserIdAsync(string email)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x=>x.Email==email);
+
+            if(user==null)
+                throw new ServiceException(ErrorCodes.EmailInUse, $"User with email {email} doesn't exist.");
+
+            return user.Id;
+
         }
     }
 }

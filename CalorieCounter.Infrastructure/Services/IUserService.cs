@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using CalorieCounter.Core.Domain;
 
@@ -9,5 +10,8 @@ namespace CalorieCounter.Infrastructure.Services
          Task<JsonWebToken> SignIn(string email, string password);
          Task<JsonWebToken> RefreshAccessToken(string token);
          Task RevokeRefreshToken(string token);
+
+         Task<Guid> GetUserIdAsync(string email);
+
     }
 }

@@ -10,6 +10,7 @@ namespace CalorieCounter.Infrastructure.Services
         public static string InvalidLastName => "invalid_lastname";
         public static string InvalidUsername => "invalid_username";
         public static string InvalidPassword => "invalid_password";
+        public static string InvalidQuantity => "invalid_quantity";
         public static string UserNotFound => "user_not_found";
     }
 }

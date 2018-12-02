@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CalorieCounter.Api.Migrations;
 using CalorieCounter.Infrastructure.Commands;
 using CalorieCounter.Infrastructure.Commands.FoodLog;
 using CalorieCounter.Infrastructure.Commands.Users;
 using CalorieCounter.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CalorieCounter.Core.Domain;
 namespace CalorieCounter.Api.Controllers
 {
     [Authorize]
@@ -40,14 +42,14 @@ namespace CalorieCounter.Api.Controllers
 
 
         [AllowAnonymous]
-        [HttpPost("tokens/{token}/refresh")]
-        public async Task<IActionResult> RefreshAccessToken(string token)
-            => Ok(await _userService.RefreshAccessToken(token));
+        [HttpPost("tokens/refresh")]
+        public async Task<IActionResult> RefreshAccessToken([FromBody] RefreshTokenModel refreshToken)
+            => Ok(await _userService.RefreshAccessToken(refreshToken.Token));
 
-        [HttpPost("tokens/{token}/revoke")]
-        public async Task<IActionResult> RevokeRefreshToken(string token)
+        [HttpPost("tokens/revoke")]
+        public async Task<IActionResult> RevokeRefreshToken([FromBody] RefreshTokenModel refreshToken)
         {
-            await _userService.RevokeRefreshToken(token);
+            await _userService.RevokeRefreshToken(refreshToken.Token);
             return NoContent();
         }
         

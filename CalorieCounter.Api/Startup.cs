@@ -19,6 +19,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Swashbuckle.AspNetCore.Swagger;
+using GraphQL;
+using CalorieCounter.Infrastructure.GraphQL;
+using GraphQL.Types;
+using CalorieCounter.Infrastructure.GraphQL.Queries;
+using CalorieCounter.Infrastructure.GraphQL.Types;
 
 namespace CalorieCounter.Api
 {
@@ -86,9 +91,23 @@ namespace CalorieCounter.Api
                 r.Configuration = Configuration["redis:ConnectionString"];
             }); 
 
+            services.AddScoped<GraphQLQuery>();
+            services.AddScoped<ProductType>();
+
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(new ContainerModule(Configuration));
+
+            builder.RegisterType<DocumentExecuter>().As<IDocumentExecuter>();
+            builder.RegisterType<GraphQLSchema>().As<ISchema>();
+            builder.Register<Func<Type, GraphType>>(c => 
+            {
+                var context = c.Resolve<IComponentContext>();
+                return t => {
+                    var res = context.Resolve(t);
+                    return (GraphType)res;
+                };
+            });
 
             ApplicationContainer = builder.Build();
 

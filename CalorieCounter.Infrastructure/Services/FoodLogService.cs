@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CalorieCounter.Core.Domain;
 using CalorieCounter.Infrastructure.DTO;
@@ -52,9 +53,48 @@ namespace CalorieCounter.Infrastructure.Services {
                 var f = new FoodEntryDto ();
                 f.Date = p.Date;
                 var product = await _productService.GetProductAsync (p.ProductId);
+                
+                product.Kcal*=p.Quantity;
+                product.Fats*=p.Quantity;
+                product.Carbohydrates*=p.Quantity;
+                product.Proteins*=p.Quantity;
+                product.ServeSize*=p.Quantity;
+
                 f.Product = product;
 
                 flDto.FoodEntries.Add (f);
+            }
+
+            return flDto;
+        }
+
+        public async Task<FoodLogDto> GetFoodLogForLastXDaysAsync(Guid userId, int days)
+        {
+            var date = DateTime.UtcNow.AddDays(-days);
+            var fl = await _context.FoodLogs.Include(i=>i.Products).SingleOrDefaultAsync (x => x.UserId == userId);
+            if (fl == null)
+                throw new ServiceException (ErrorCodes.InvalidId, $"User with id: {userId} doesn't exist.");
+
+            var flDto = new FoodLogDto ();
+            flDto.FoodEntries = new List<FoodEntryDto> ();
+
+            foreach (var p in fl.Products) {
+                var f = new FoodEntryDto ();
+                if(p.Date > date)
+                {
+                    f.Date = p.Date;
+                    var product = await _productService.GetProductAsync (p.ProductId);
+
+                product.Kcal*=p.Quantity;
+                product.Fats*=p.Quantity;
+                product.Carbohydrates*=p.Quantity;
+                product.Proteins*=p.Quantity;
+                product.ServeSize*=p.Quantity;
+
+
+                    f.Product = product;
+                    flDto.FoodEntries.Add (f);
+                }
             }
 
             return flDto;

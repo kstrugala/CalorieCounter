@@ -69,6 +69,24 @@ namespace CalorieCounter.Api.Controllers
             return Json(foodLog);
         }
 
+        [HttpGet("foodlog/lastweek")]
+        public async Task<IActionResult> GetLastWeekFoodLog()
+        {
+            var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = await _userService.GetUserIdAsync(email);
+            var foodLog = await _foodLogService.GetFoodLogForLastXDaysAsync(userId, 7);
+            return Json(foodLog);
+        }
+
+        [HttpGet("foodlog/lastmonth")]
+        public async Task<IActionResult> GetLastMothFoodLog()
+        {
+            var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = await _userService.GetUserIdAsync(email);
+            var foodLog = await _foodLogService.GetFoodLogForLastXDaysAsync(userId, 30);
+            return Json(foodLog);
+        }
+
         [HttpPost("foodlog")]
         public async Task<IActionResult> AddToFoodLog([FromBody] AddToFoodLogCommand command)
         {

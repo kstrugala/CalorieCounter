@@ -25,8 +25,8 @@ namespace CalorieCounter.Infrastructure.GraphQL.Queries
             Field<ListGraphType<ProductType>>("products",
                 arguments: new QueryArguments(new QueryArgument<StringGraphType> {Name = "name"}, new QueryArgument<IntGraphType> {Name = "takeFirst"}),
                 resolve: context => {
-                    var takeFirst = context.GetArgument<int>("takeFirst");
-                    var name = context.GetArgument<string>("name");
+                    var takeFirst = context.GetArgument<int>("takeFirst", 5);
+                    var name = context.GetArgument<string>("name", "");
 
                     return efContext.Products.Where(x=>x.Name.Contains(name)).Take(takeFirst).ToList();
                 }

@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/CalorieCounter.Api/bin/Debug/netcoreapp2.1/CalorieCounter.Api.dll",
+            "program": "${workspaceFolder}/CalorieCounter.Api/bin/Debug/netcoreapp2.2/CalorieCounter.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/CalorieCounter.Api",
             "console": "internalConsole",
